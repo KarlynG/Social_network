@@ -1,3 +1,5 @@
+Social Network made with Symfony 3, Ajax and PHP.
+
 Symfony Standard Edition
 ========================
 
