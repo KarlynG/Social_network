@@ -1,0 +1,195 @@
+{% extends "AppBundle:Layouts:layout.html.twig" %}
+
+{% block myjs %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('assets/js/home.js') }}"></script>
+{% endblock %}
+
+{% block title %}
+    Home - The Real Social Network
+{% endblock %}
+
+{% block content %}
+    
+    {% if app.user.active == '1' %}
+        <script type="text/javascript">
+            location.href="logout";
+        </script>
+    {% endif %}
+    
+    <div class="container">
+        <div class="col-lg-7 card form-fix float-start timeline">
+            <div class="card-body">
+
+                <h1 class="card-header">Publicaciones tuyas y de amigos</h1>
+
+                <div class="card-body box-content">
+                    {% for publication in pagination %}
+                        <div class="card no-border publication-item">
+                            <div class="row">
+                                <div class="col-sm-2">
+
+                                    <div class="card-body">
+                                        <div class='avatar'>
+                                            {% if publication.user.image == null %}
+                                                <a href="{{ path('user_profile', {'nickname': publication.user.nick}) }}">
+                                                    <img src='{{ asset('assets/media/default.png') }}'/>
+                                                </a>
+
+                                            {% else %}
+                                                <a href="{{ path('user_profile', {'nickname': publication.user.nick}) }}">
+                                                    <img src='{{ asset('uploads/user/'~publication.user.image) }}'/>
+                                                </a>
+
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-10">
+
+                                    <div class="card-body">
+                                        <a class="pub-name" href="{{ path('user_profile', {'nickname': publication.user.nick}) }}">{{ publication.user.name }} {{ publication.user.surname }}</a>
+                                        -
+                                        @{{ publication.user.nick }}
+                                        -
+                                        {{ publication.createdAt|date('d-m-Y') }}
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm mb-3">
+                                    {% if (publication.user.id is defined) and (publication.user.id == app.user.id) %}
+                                        <div class="position-absolute top-0 end-0">
+                                            <a class="btn btn-primary btn-pub-option"
+                                               data-bs-toggle="collapse"
+                                               href="#collapseExample{{ publication.id }}"
+                                               role="button"
+                                               aria-expanded="false"
+                                               aria-controls="collapseExample{{ publication.id }}">
+                                                <i class="bi bi-three-dots"></i>
+                                            </a>
+                                            <div class="collapse" id="collapseExample{{ publication.id }}">
+                                                <div class="list-group" data-id="{{ publication.id }}">
+                                                    <a href="#" style="color: black;" class="list-group-item list-group-item-action btn-edit">
+                                                        <i class="bi bi-pencil"> Editar</i>
+                                                    </a>
+                                                    <a href="#" style="color: red;" class="btn-delete-pub list-group-item list-group-item-action">
+                                                        <i class="bi bi-trash"> Eliminar</i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+                            <div class="card card-fix-3" id="publication-text">
+                                <div class="card-body">
+                                    {{ publication.text }}
+                                </div>
+                                {% if publication.image != null %}
+                                    <div class="card-footer">
+                                        <a href="{{ asset('uploads/publications/images/'~publication.image) }}" target="_blank">
+                                            <img src='{{ asset('uploads/publications/images/'~publication.image) }}' style="max-width: 100%" />
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                <div class="card-footer bg-light">
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                        <button type="button" class="btn btn-outline-primary btn-like"
+                                                {% if app.user|liked(publication) == true %}
+                                                    hidden
+                                                {% endif %}
+                                                id="btn-like" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-hand-thumbs-up"></i>Like</button>
+                                        <button type="button" class="btn btn-primary btn-dislike" 
+                                                {% if app.user|liked(publication) == false %}
+                                                    hidden
+                                                {% endif %}
+                                                id="btn-dislike" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-hand-thumbs-up"></i>Like</button>
+                                        <a href="http://localhost/curso-social-network/web/app_dev.php/publication/stats/{{ publication.id }}" class="btn btn-outline-info" id="btn-comment" ><i id="btn-ico" class="bi bi-chat-right-text"></i>Comentar</a>
+                                        <button type="button" class="btn btn-outline-warning btn-share" id="btn-share" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-share"></i>Compartir</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr/>
+
+
+                    {% endfor %}
+
+                </div>
+
+                <div class="card-body" hidden="true">
+                    {{ knp_pagination_render(pagination) }}
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <div id="user-card" class="col-lg-4 card form-fix float-start">
+        <div class="card-body">
+            <div class='avatar'>
+                {% if app.user.image == null %}
+                    <a href="{{ path('user_profile', {'nickname': app.user.nick}) }}">
+                        <img src='{{ asset('assets/media/default.png') }}'/>
+                    </a>
+
+                {% else %}
+                    <a href="{{ path('user_profile', {'nickname': app.user.nick}) }}">
+                        <img src='{{ asset('uploads/user/'~app.user.image) }}'/>
+                    </a>
+
+                {% endif %}
+            </div>
+            <div class="card no-border">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="card-header border-light name-surname">
+                            <a href="{{ path('user_profile', {'nickname': app.user.nick}) }}">{{ app.user.name }} {{ app.user.surname }}</a>
+                            <br/>
+                            <span class="nickname">
+                                @{{ app.user.nick }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card-header border-light name-surname">
+                            <a href="{{ path("user_edit") }}"><i style="font-size: 2rem; color: cornflowerblue;" class="bi bi-sliders"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+
+                    {% set user_stats = app.user|user_stats %}
+
+                    <div class="btn-group" style="right: 20px;">
+                        <a href="{{ path('following_users', {'nickname': app.user.nick}) }}" class="btn btn-light active" aria-current="page">Amigos {{ user_stats.following }}</a>
+                        <a href="{{ path('followed_users', {'nickname': app.user.nick}) }}" class="btn btn-light">Seguidores {{ user_stats.followers }}</a>
+                        <a href="{{ path('user_profile', {'nickname': app.user.nick}) }}" class="btn btn-light">Publicaciones {{ user_stats.publications }}</a>
+                        <a href="{{ path('user_likes', {'nickname': app.user.nick}) }}" class="btn btn-light">Likes {{ user_stats.likes }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+
+    <div id="user-card" class="col-lg-4 card form-fix float-start">
+        <h1 class="card-header">
+            Crear publicacion
+        </h1>
+        <div class="card-body">
+            {{ form_start(form, {action: '', 'method': 'POST'}) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

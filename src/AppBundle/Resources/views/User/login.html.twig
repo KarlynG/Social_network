@@ -1,0 +1,46 @@
+{% extends "AppBundle:Layouts:layout.html.twig" %}
+
+{% block title %}
+    Ingresa una cuenta - The Real Social Network
+{% endblock %}
+
+{% block content %}
+    <div class='card' style="max-width: 85rem; margin:auto; top: 15px;">
+        <div class="card-body">
+            <div class='row'>
+                <div class="col-md-8">
+                    <img src="{{ asset('assets/media/background.jpg') }}" style='max-width: 870px; height: 570px; border-radius: 5%; border: 5px solid #33FFAA;' />
+                </div>
+                
+                <div class="col-md-4 login-sec">
+                    <h2>Ingresar</h2>
+                    <hr/>
+                    </br>
+                    
+                    <form action='{{ path('login_check') }}' method="POST">
+                        <div class="form-floating mb-5">
+                            <input type="email" id="username" name='_username' value='{{ last_username }}' class='form-control' />
+                            <label for="username">Email address <i class="bi bi-file-person"></i></label>
+                        </div>
+                            
+                        <div class="form-floating mb-4">
+                            <input type='password' id='password' name='_password' class="form-control" />
+                            <label for="password">Password <i class="bi bi-shield-lock"></i></label>
+                        </div>
+                        
+                        <input type='submit' value='Log In' class='btn btn-primary' style='margin-bottom:10px;' />&nbsp;&nbsp;&nbsp;<i class="bi bi-card-checklist" style="font-size: 2rem; color: cornflowerblue; margin-left: 10px;"></i>
+                        <input type='hidden' name='_target_path' value='/home' />
+                    </form>
+                            </br>
+                            <p>
+                                ¿No tienes cuenta? <a href="{{ path("register") }}">Registrarse</a> 
+                                </br></br>
+                                <a href="url">Olvidé mi contraseña</a>
+                            </p>
+                            
+                            
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

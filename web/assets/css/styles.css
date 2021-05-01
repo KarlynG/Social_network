@@ -1,0 +1,261 @@
+* {
+    font-family: 'Nunito', 'sans-serif';
+}
+
+.my-dropdown-toggle:after {
+ display: none;
+}
+
+/* NAVBAR */
+.menu-bar{
+    background-image: linear-gradient(-90deg, #33C0FF, #33FFAA);
+}
+.menu-bar2{
+    background-image: linear-gradient(-90deg, rgb(121, 82, 179), #33FFAA);
+}
+.nav-link {
+    font-size: 16px;
+    margin: 3px;
+    color: #fff!important;
+    font-weight: 500;
+}
+
+.navbar-nav{
+    text-align: right;
+    margin-right: 20px;
+}
+
+.menu-bar .navbar-toogler{
+    padding-left: 20px;
+    outline: none!important;
+    border: none!important;
+}
+
+.navbar .fa{
+    color: #fff!important;
+    font-size: 26px;
+}
+
+.nav-link:hover {
+    font-weight: 600;
+    border-bottom: 1px solid #fff;
+}
+
+.navbar-brand i{
+    width: 68px;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+
+
+@media only screen and (max-width: 1000px){
+    .nav-link:hover {
+        border-bottom: none!important;
+    }
+}
+
+/* FORMULARIO */
+
+.login-sec{padding: 50px 30px; position:relative;}
+.login-sec .copy-text{position:absolute; width:80%; bottom:20px; font-size:13px; text-align:center;}
+.card-fix{
+    position: relative;
+    max-width: 48rem;
+    top: 10px;
+    margin: auto;
+    padding: auto;
+}
+
+.card-fix2{
+    position: relative;
+    max-width: 68rem;
+    top: 10px;
+    margin: auto;
+    padding: auto;
+}
+
+.form-fix{
+    top: 10px;
+    margin: auto;
+    padding-bottom: 100px;
+}
+
+/* FONDO */
+body{
+    background: #eee;
+}
+
+/* AVATAR */
+.navbar-nav .avatar{
+    background: white;
+    border-radius: 500px;
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    float: left;
+    margin-right: 12px;
+    margin-top: -5px;
+}
+
+.navbar-nav .avatar img{
+    height: 100%;
+    text-align: center;
+}
+
+/* GENTE y Timeline*/
+.user-item .avatar,
+.publication-item .avatar{
+    background: #eee;
+    border-radius: 550px;
+    width: 75px;
+    height: 75px;
+    overflow: hidden;
+    float: left;
+}
+
+.user-item .avatar img,
+.publication-item .avatar img{
+    height: 100%;
+    text-align: center;
+}
+
+.user-item .user-item-content{
+    padding: 10px;
+    margin-left: 85px;
+}
+
+/* HOME */
+.timeline{
+    margin-right: 20px;
+    min-height: 750px;
+}
+
+.card-header{
+    paddding: 10px;
+    padding-top: 0px;
+    font-size: 25px;
+    background: white;
+    border: none;
+    border-bottom: 1px solid #ccc;
+}
+
+#user-card{
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-left: 25px;
+}
+
+#user-card .avatar{
+    background: #eee;
+    border-radius: 500px;
+    width: 75px;
+    height: 75px;
+    overflow: hidden;
+    float: left;
+}
+
+#user-card .avatar img{
+    height: 75px;
+    text-align: center;
+}
+
+#user-card .name-surname{
+    font-size: 20px;
+    background: white;
+    border: none;
+}
+
+#user-card .name-surname a{
+    color: black;
+    border-bottom: 1px solid #fff;
+    font-size: 15px;
+}
+
+#user-card .nickname{
+    opacity: 0.7;
+    font-size: 25px;
+}
+
+.no-border{
+    border: none;
+}
+
+.card-fix3{
+    margin: auto;
+    padding: auto;
+    max-width: 48rem;
+}
+
+.card-footer{
+    background: white;
+}
+
+#publication-text{
+    max-width: 34rem; 
+    margin-left: 128px; 
+    bottom: 30px;
+}
+
+#btn-like,
+#btn-dislike{
+    width:170px;
+}
+
+#btn-comment{
+    width:170px;
+}
+
+#btn-share{
+    width:170px;
+}
+
+#btn-ico{
+    position: relative;
+    right: 10px;
+}
+
+/* Publication Stats */
+.card-fix4{
+    max-width: 78rem;
+    min-height: 30rem;
+    margin: auto;
+    top: 10px;
+}
+
+.publication-item2 .avatar2{
+    background: #eee;
+    border-radius: 550px;
+    width: 145px;
+    height: 145px;
+    overflow: hidden;
+    float: left;
+}
+
+.publication-item2 .avatar2 img{
+    height: 100%;
+    text-align: center;
+}
+
+.publication-item2 .another-img{
+    position: relative;
+    background: #eee;
+    border-radius: 550px;
+    width: 95px;
+    height: 95px;
+    overflow: hidden;
+    left: 60px;
+    top: 10px;
+}
+
+.publication-item2 .another-img img{
+    height: 100%;
+    text-align: center;
+}
+
+.card-fix5{
+    max-width: 78rem;
+    min-height: 20rem;
+    margin: auto;
+    top: 10px;
+}
+

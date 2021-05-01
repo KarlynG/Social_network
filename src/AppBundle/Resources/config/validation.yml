@@ -1,0 +1,13 @@
+MainBundle\Entity\User:
+    properties:
+        name:
+            - NotBlank: {message: "No puede dejar el nombre vacïo"}
+        surname:
+            - NotBlank: {message: "No puede dejar el apellido vacïo"}
+        nick:
+            - NotBlank: {message: "No puede dejar el nick vacïo"}
+        email:
+            - NotBlank: {message: "No puede dejar el email vacïo"}
+            - Email: 
+                message: El mail {{ value }} no es válido.
+                checkMX: false

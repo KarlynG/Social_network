@@ -1,0 +1,129 @@
+{% extends "AppBundle:Layouts:layout.html.twig" %}
+
+{% block title %}
+    Likes - The Real Social Network
+{% endblock %}
+
+
+{% block myjs %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('assets/js/home.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="col-lg-12 card form-fix float-start timeline">
+            <div class="card-body">
+
+                <h1 class="card-header">Publicaciones que le gustan a {{ user.nick }}</h1>
+
+                <div class="card-body box-content">
+                    {% for like in pagination %}
+                        {% set publication = like.publication %}
+                        <div class="card no-border publication-item">
+                            <div class="row">
+                                <div class="col-sm-1">
+
+                                    <div class="card-body">
+                                        <div class='avatar'>
+                                            {% if publication.user.image == null %}
+                                                <a href="{{ path('user_profile', {'nickname': publication.user.nick}) }}">
+                                                    <img src='{{ asset('assets/media/default.png') }}'/>
+                                                </a>
+
+                                            {% else %}
+                                                <a href="{{ path('user_profile', {'nickname': publication.user.nick}) }}">
+                                                    <img src='{{ asset('uploads/user/'~publication.user.image) }}'/>
+                                                </a>
+
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-10">
+
+                                    <div class="card-body">
+                                        <a class="pub-name" href="{{ path('user_profile', {'nickname': publication.user.nick}) }}">{{ publication.user.name }} {{ publication.user.surname }}</a>
+                                        -
+                                        @{{ publication.user.nick }}
+                                        -
+                                        {{ publication.createdAt|date('d-m-Y') }}
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm mb-3">
+                                    {% if (publication.user.id is defined) and (publication.user.id == app.user.id) %}
+                                        <div class="position-absolute top-0 end-0">
+                                            <a class="btn btn-primary btn-pub-option"
+                                               data-bs-toggle="collapse"
+                                               href="#collapseExample{{ publication.id }}"
+                                               role="button"
+                                               aria-expanded="false"
+                                               aria-controls="collapseExample{{ publication.id }}">
+                                                <i class="bi bi-three-dots"></i>
+                                            </a>
+                                            <div class="collapse" id="collapseExample{{ publication.id }}">
+                                                <div class="card card-body btn-delete-pub" data-id="{{ publication.id }}">
+                                                    <a href="#" style="color: red">
+                                                        <i class="bi bi-trash"> Eliminar Publicacion</i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+                            <div class="card card-fix-3" id="publication-text">
+                                <div class="card-body">
+                                    {{ publication.text }}
+                                </div>
+                                {% if publication.image != null %}
+                                    <div class="card-footer">
+                                        <a href="{{ asset('uploads/publications/images/'~publication.image) }}" target="_blank">
+                                            <img src='{{ asset('uploads/publications/images/'~publication.image) }}' style="max-width: 100%" />
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                <div class="card-footer bg-light">
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                        <button type="button" class="btn btn-outline-primary btn-like"
+                                                {% if app.user|liked(publication) == true %}
+                                                    hidden
+                                                {% endif %}
+                                                id="btn-like" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-hand-thumbs-up"></i>Like</button>
+                                        <button type="button" class="btn btn-primary btn-dislike" 
+                                                {% if app.user|liked(publication) == false %}
+                                                    hidden
+                                                {% endif %}
+                                                id="btn-dislike" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-hand-thumbs-up"></i>Like</button>
+                                        <button type="button" class="btn btn-outline-info" id="btn-comment" data-id="{{ publication.id }}" ><i id="btn-ico" class="bi bi-chat-right-text"></i>Comentar</button>
+                                        <button type="button" class="btn btn-outline-warning" id="btn-share" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-share"></i>Compartir</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr/>
+
+
+                    {% endfor %}
+
+                </div>
+
+                <div class="card-body" hidden="true">
+                    {{ knp_pagination_render(pagination) }}
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+                    
+</div>
+{% endblock %}

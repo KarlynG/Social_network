@@ -1,0 +1,177 @@
+{% extends "AppBundle:Layouts:layout.html.twig" %}
+{% block myjs %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('assets/js/home.js') }}"></script>
+
+{% endblock %}
+
+{% block title %}
+    Perfil - The Real Social Network
+{% endblock %}
+
+{% block content %}
+    <div class="col-sm-10 card form-fix profile-box" style="max-width: 68rem;">
+
+        <div class="user-publications">
+            <div class="card bg-white border-light text-white">
+                {% if user.image != null %}
+                    <img src="{{ asset('uploads/user/'~user.image) }}" style="filter: brightness(30%); max-width: 62rem;  height: 25rem; object-fit: cover; margin: auto;" class="card-img"/>
+                {% else %}
+                    <img src="{{ asset('assets/media/default.png') }}" style="filter: brightness(30%); max-width: 62rem;  height: 25rem; object-fit: cover; margin: auto;" class="card-img"/>
+                {% endif %}
+                <div class="card-img-overlay">
+                    <div class='avatar' style="background: #eee;
+                         border-radius: 700px;
+                         position: relative;
+                         top: 10px;
+                         width: 180px;
+                         height: 180px;
+                         overflow: hidden;
+                         margin: 0px auto;">
+                        {% if user.image == null %}
+                            <img src='{{ asset('assets/media/default.png') }}' style= "height: 100%;
+                                 text-align: center;" />
+                        {% else %}
+                            <img src='{{ asset('uploads/user/'~user.image) }}' style="height: 100%;
+                                 text-align: center;" />
+                        {% endif %}
+                    </div>
+
+                    <div class="name-surname">
+                        <h6 style="text-align: center; position: relative; top: 15px; ">
+                            @{{ user.nick }}
+                            {% if user|following(app.user) == true %}
+                                <span class="badge bg-secondary">(Te sigue)</span></h6>
+                            {% endif %}
+
+                        </h6>
+                        <h2 style="text-align: center; position: relative; top: 15px; ">{{ user.name }} {{ user.surname }}</h2>
+                        <h4 style="text-align: center; position: relative; top: 15px; ">{{ user.bio }}</h4>
+                        {% if app.user.id != user.id %}
+                            <br/>
+                            <div class="text-center buttons-following">
+                                <button class="btn btn-success btn-follow"
+                                        {% if app.user|following(user) == true %}
+                                            hidden
+                                        {% endif %}
+                                        "
+                                        data-followed="{{ user.id }}">
+                                    <i class="bi bi-person-plus"></i>_Agregar como amigo
+                                </button>
+
+                                <button class="btn btn-dark btn-unfollow"
+                                        {% if app.user|following(user) == false %}
+                                            hidden
+                                        {% endif %}
+                                        "
+                                        data-followed="{{ user.id }}">
+                                    <i class="bi bi-person-x-fill"></i>_Quitar de mi lista de amigos
+                                </button>
+
+                            </div>
+                        {% endif %}
+                        <br/>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+
+            <div class="card-body text-center">
+                {% set user_stats = user|user_stats %}
+                <div class="btn-group btn-group-lg">
+                    <a href="{{ path('following_users', {'nickname': user.nick}) }}" class="btn btn-light" aria-current="page">Amigos {{ user_stats.following }}</a>
+                    <a href="{{ path('followed_users', {'nickname': user.nick}) }}" class="btn btn-light">Seguidores {{ user_stats.followers }}</a>
+                    <a href="{{ path('user_profile', {'nickname': user.nick}) }}" class="btn btn-light">Publicaciones {{ user_stats.publications }}</a>
+                    <a href="{{ path('user_likes', {'nickname': app.user.nick}) }}" class="btn btn-light">Likes {{ user_stats.likes }}</a>
+                </div>
+            </div>
+            <hr/>
+            {% for publication in pagination %}
+                <div class="card no-border publication-item" style="padding: 30px;">
+                    <div class="row">
+                        <div class="col-sm-1">
+
+                            <div class="card-body">
+                                <div class='avatar'>
+                                    {% if publication.user.image == null %}
+                                        <img src='{{ asset('assets/media/default.png') }}'/>
+                                    {% else %}
+                                        <img src='{{ asset('uploads/user/'~publication.user.image) }}'/>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-sm mb-3">
+
+                            <div class="card-body">
+                                <a class="pub-name" href="#">{{ publication.user.name }} {{ publication.user.surname }}</a>
+                                -
+                                @{{ publication.user.nick }}
+                                -
+                                {{ publication.createdAt|date('d-m-Y') }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="card card-fix-3" style="max-width: 58rem; margin-left: 128px; bottom: 30px;">
+                        <div class="card-body">
+                            {{ publication.text }}
+                        </div>
+                        {% if publication.image != null %}
+                            <div class="card-footer">
+                                <a href="{{ asset('uploads/publications/images/'~publication.image) }}" target="_blank">
+                                    <img src='{{ asset('uploads/publications/images/'~publication.image) }}' style="max-width: 100%" />
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        <div class="card-footer bg-light">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                {% if app.user.id == user.id %}
+                                    <button type="button" class="btn btn-outline-primary btn-like" style="width: 290px;"
+                                            {% if app.user|liked(publication) == true %}
+                                                hidden
+                                            {% endif %}
+                                            id="btn-like" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-hand-thumbs-up"></i>Like</button>
+                                    <button type="button" class="btn btn-primary btn-dislike" style="width: 290px;"
+                                            {% if app.user|liked(publication) == false %}
+                                                hidden
+                                            {% endif %}
+                                            id="btn-dislike" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-hand-thumbs-up"></i>Like</button>
+                                    <a href="http://localhost/curso-social-network/web/app_dev.php/publication/stats/{{ publication.id }}" class="btn btn-outline-info" style="width: 290px;" id="btn-comment" data-id="{{ publication.id }}" ><i id="btn-ico" class="bi bi-chat-right-text"></i>Comentar</a>
+                                    <button type="button" class="btn btn-outline-danger btn-delete-pub-profile" style="width: 290px;" id="btn-share" data-id="{{ publication.id }}"><i id="btn-ico"  class="bi bi-trash2"></i>Eliminar</button>
+                                {% else %}
+                                    <button type="button" class="btn btn-outline-primary btn-like" style="width: 430px;"
+                                            {% if app.user|liked(publication) == true %}
+                                                hidden
+                                            {% endif %}
+                                            id="btn-like" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-hand-thumbs-up"></i>Like</button>
+                                    <button type="button" class="btn btn-primary btn-dislike" style="width: 430px;"
+                                            {% if app.user|liked(publication) == false %}
+                                                hidden
+                                            {% endif %}
+                                            id="btn-dislike" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-hand-thumbs-up"></i>Like</button>
+                                    <a href="http://localhost/curso-social-network/web/app_dev.php/publication/stats/{{ publication.id }}" class="btn btn-outline-info" style="width: 430px;" id="btn-comment" data-id="{{ publication.id }}" ><i id="btn-ico" class="bi bi-chat-right-text"></i>Comentar</a>
+
+                                {% endif %};
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <hr/>
+
+
+            {% endfor %}
+
+            <div class="card-body" hidden="true">
+                {{ knp_pagination_render(pagination) }}
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

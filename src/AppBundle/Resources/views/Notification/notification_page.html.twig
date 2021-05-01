@@ -1,0 +1,53 @@
+{% extends "AppBundle:Layouts:layout.html.twig" %}
+
+{% block title %}
+    Notificaciones - The Real Social Network
+{% endblock %}
+
+{% block content %}
+    <div class='container'>
+        <div class='card card-fix'>
+            <div class='card-body'>
+                <h1 class="card-header">Notificaciones</h1>
+            </div>
+
+            {% if pagination|length == 0 %}
+                <div class='card-body'>
+                    No se encontraron notificaciones
+                </div>
+            {% else %}
+                {% for notification in pagination %}
+                    <div class='card-body'>
+
+                        {% set mynot = notification.typeId|get_user %}
+
+                        {% if notification.type == "follow" %}
+                            <a href="{{ path('user_profile', {'nickname': mynot.nick}) }}" style='text-decoration: none;
+                               color: inherit;'>
+                                <div class='alert alert-info'>
+                                    {{ mynot.nick }} Te agregó como amigo
+                                {% endif %}
+
+                                {% if notification.type == "like" %}
+                                    <a href="http://localhost/curso-social-network/web/app_dev.php/publication/stats/{{ notification.extra }}" style='text-decoration: none;
+                                       color: inherit;'>
+                                        <div class='alert alert-info'>
+                                            {{ mynot.nick }} le ha dado like a una publicación tuya
+                                        {% endif %}
+
+                                        {% if notification.type == "comment" %}
+                                            <a href="http://localhost/curso-social-network/web/app_dev.php/publication/stats/{{ notification.extra }}" style='text-decoration: none;
+                                               color: inherit;'>
+                                                <div class='alert alert-info'>
+                                                    {{ mynot.nick }} Ha comentado tu publicación
+                                                {% endif %}
+
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+                    </div>
+            </div>
+        {% endblock %}

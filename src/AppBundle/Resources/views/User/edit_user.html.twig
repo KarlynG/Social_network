@@ -1,0 +1,21 @@
+{% extends "AppBundle:Layouts:layout.html.twig" %}
+
+{% block title %}
+    Editar Usuario - The Real Social Network
+{% endblock %}
+
+{% block content %}
+    
+    <div class="card card-fix border-dark">
+        <div class="card-header text-primary">
+            <h2 class='text-center'>Mis datos</h2>
+        </div>
+        <div class="card-body">
+            <div class="col-lg-8 form-fix">
+                {{ form_start(form, {'enctype':'multipart/form-data'}) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

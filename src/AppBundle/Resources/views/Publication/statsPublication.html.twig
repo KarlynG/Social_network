@@ -1,0 +1,164 @@
+{% extends "AppBundle:Layouts:layout.html.twig" %}
+
+{% block title %}
+    Publicaciones - The Real Social Network
+{% endblock %}
+
+{% block myjs %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('assets/js/home.js') }}"></script>
+
+{% endblock %}
+
+{% block content %}
+    {% for publication in test %}
+        <div class="card no-border publication-item2 card-fix4" style="padding: 60px;">
+            <div class="row">
+                <div class="col-sm-1">
+
+                    <div class="card-body">
+                        <div class='avatar2'>
+                            {% if test2.image == null %}
+                                <a href="{{ path('user_profile', {'nickname': test2.nick}) }}">
+                                    <img src='{{ asset('assets/media/default.png') }}'/>
+                                </a>
+                            {% else %}
+                                <a href="{{ path('user_profile', {'nickname': test2.nick}) }}">
+                                    <img src='{{ asset('uploads/user/'~test2.image) }}'/>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm mb-3" style="margin-left: 68px; margin-top: 30px;">
+
+                    <div class="card-body">
+                        <a class="pub-name" href="{{ path('user_profile', {'nickname': publication.user.nick}) }}">{{ test2.name }} {{ test2.surname }}</a>
+                        -
+                        @{{ test2.nick }}
+                        -
+                        {{ publication.createdAt|date('d-m-Y') }}
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card card-fix-3" style="max-width: 58rem; margin-left: 178px; bottom: 80px;">
+                <div class="card-body">
+                    {{ publication.text }}
+                </div>
+                {% if publication.image != null %}
+                    <div class="card-footer text-center">
+                        <a href="{{ asset('uploads/publications/images/'~publication.image) }}" target="_blank">
+                            <img src='{{ asset('uploads/publications/images/'~publication.image) }}' style="max-width: 100%" />
+                        </a>
+                    </div>
+                {% endif %}
+
+                <div class="card-footer bg-light">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        {% if app.user.id == test2.id %}
+                            <button type="button" class="btn btn-outline-primary btn-like" style="width: 290px;"
+                                    {% if app.user|liked(publication) == true %}
+                                        hidden
+                                    {% endif %}
+                                    id="btn-like" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-hand-thumbs-up"></i>Like</button>
+                            <button type="button" class="btn btn-primary btn-dislike" style="width: 290px;"
+                                    {% if app.user|liked(publication) == false %}
+                                        hidden
+                                    {% endif %}
+                                    id="btn-dislike" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-hand-thumbs-up"></i>Like</button>
+                            <button type="button" class="btn btn-outline-warning btn-share" style="width: 290px;" id="btn-comment" data-id="{{ publication.id }}" ><i id="btn-ico" class="bi bi-share"></i>Compartir</button>
+                            <button type="button" class="btn btn-outline-danger btn-delete-pub-profile" style="width: 290px;" id="btn-share" data-id="{{ publication.id }}"><i id="btn-ico"  class="bi bi-trash2"></i>Eliminar</button>
+                        {% else %}
+                            <button type="button" class="btn btn-outline-primary btn-like" style="width: 430px;"
+                                    {% if app.user|liked(publication) == true %}
+                                        hidden
+                                    {% endif %}
+                                    id="btn-like" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-hand-thumbs-up"></i>Like</button>
+                            <button type="button" class="btn btn-primary btn-dislike" style="width: 430px;"
+                                    {% if app.user|liked(publication) == false %}
+                                        hidden
+                                    {% endif %}
+                                    id="btn-dislike" data-id="{{ publication.id }}"><i id="btn-ico" class="bi bi-hand-thumbs-up"></i>Like</button>
+                            <button type="button" class="btn btn-outline-warning btn-share" style="width: 430px;" id="btn-comment" data-id="{{ publication.id }}" ><i id="btn-ico" class="bi bi-share"></i>Compartir</button>
+
+                        {% endif %};
+
+                    </div>
+                </div>
+            </div>
+            <hr/>
+
+            <div class="row">
+
+                <div class="col-sm-2">
+                    <div class="card-body">
+                        <div class="another-img">
+                            {% if app.user.image != null %}
+                                <img src="{{ asset('uploads/user/'~app.user.image) }}"/>
+                            {% else %}
+                                <img src="{{ asset('assets/media/default.png') }}"/>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-sm">
+                    <div class="card" style="margin-top: 30px;">
+                        <div class="card-body">
+                            {{ form_start(form, {action: '', 'method': 'POST'}) }}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    {% endfor %}
+
+
+    <div class="card no-border publication-item2 card-fix5" style="padding: 60px;">
+        <div class="card-body">
+            <hr/>
+            {% for comments in comment %}
+                <div class="row">
+
+                    <div class="col-sm-2">
+                        <div class="card-body">
+                            <div class="another-img">
+                                {% if app.user.image != null %}
+                                    <a href="{{ path('user_profile', {'nickname': comments.emitter.nick}) }}">
+                                        <img src="{{ asset('uploads/user/'~comments.emitter.image) }}"/>
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('user_profile', {'nickname': comments.emitter.nick}) }}">
+                                        <img src="{{ asset('assets/media/default.png') }}"/>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm">
+                        <div class="card" style="margin-top: 30px;">
+                            <div class="card-header fs-6">
+                                <a href="{{ path('user_profile', {'nickname': comments.emitter.nick}) }}"> {{ comments.emitter.name }} {{ comments.emitter.surname }} </a> - {{ comments.emitter.nick }} - {{ comments.createdAt|date('d-m-Y') }}
+                            </div>
+                            <div class="card-body fs-5">
+                                {{ comments.message }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

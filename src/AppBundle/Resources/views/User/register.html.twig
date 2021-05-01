@@ -1,0 +1,33 @@
+{% extends "AppBundle:Layouts:layout.html.twig" %}
+{% block myjs %}
+    {{ parent() }}
+    <script src="{{ asset('assets/js/nick-test.js') }}"></script>
+{% endblock %}
+
+{% block title %}
+    Abre tu cuenta hoy! - The Real Social Network
+{% endblock %}
+
+{% block content %}
+    
+    <div class='card' style="max-width: 85rem; margin:auto; top: 15px;">
+        <div class="card-body">
+            <div class='row'>
+                <div class="col-md-4 login-sec">
+                    <h2>Registrarse</h2>
+                    <hr/>
+
+                    {{ form_start(form, {'action':'', 'method':'POST'}) }}
+                    <label class="form-label">Telefono</label>
+                    <input id="phone" type="tel" class="mb-3 form-email form-control" value="" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"/>
+                    {{ form_errors(form) }}
+                    {{ form_end(form) }}
+                </div>
+
+                <div class="col-md-8 banner-sec">
+                    <img src="{{ asset('assets/media/register_pic.png') }}" style='max-width: 870px; height: 570px; border-radius: 5%; border: 5px solid #33C0FF;'/>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

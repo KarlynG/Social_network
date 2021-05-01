@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            {% block title %}The Real Social Network{% endblock %}
+        </title>
+
+        {% block mycss %}
+            <!-- Add Css styles -->
+            <link href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
+            <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+            <link href="{{ asset('assets/css/styles.css') }}" type="text/css" rel="stylesheet" />
+
+        {% endblock %}
+
+        {% block myjs %}
+            <script type="text/javascript">
+                var URL = "{{ app.request.getSchemeAndHttpHost() }}/curso-social-network/web/app_dev.php";
+            </script>
+            <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('assets/js/jquery/jquery-3.5.1.min.js') }}"></script>
+            <script src="{{ asset('assets/js/jquery/jquery-ias.min.js') }}"></script>
+            <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+            <script src="{{ asset('assets/js/common.js') }}"></script>
+
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+            <div class="header">
+                {% if app.user == null %}
+                    <div class="menu-bar">
+                    {% else %}
+                        <div class="menu-bar2">
+                        {% endif %}
+                        <nav class="navbar navbar-expand-lg navbar-light">
+                            <div class="container-fluid">
+                                <a class="navbar-brand text-primary" href="{{ path("login") }}"><i class="bi bi-intersect">The Real Social Network</i></a>
+                                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                    <i class="bi bi-layout-sidebar"></i>
+                                </button>
+
+                                <div class="collapse navbar-collapse" id="navbarNav">
+                                    {% if app.user == null %}
+                                        <ul class="navbar-nav ms-auto"> 
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{ path("login") }}"><i class="bi bi-key"></i>&nbsp;Login</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{ path("register") }}"><i class="bi bi-person"></i>&nbsp;Register</a>
+                                            </li>
+                                        </ul>
+                                    {% else %}
+                                        <ul class="navbar-nav"> 
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{ path("login") }}"><i class="bi bi-house"></i>&nbsp;Inicio</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{ path("user_list") }}"><i class="bi bi-person-plus"></i>&nbsp;Conocer Gente</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <div class="container-fluid">
+                                                    <form action="{{ path('user_search') }}" class="d-flex">
+                                                        <input type="search" class="form-control me-2" placeholder="Buscar gente" name="search" />
+                                                        <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i></button>
+                                                    </form>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    {% endif %}
+
+                                    {% if app.user != null %}
+                                        <div class="dropdown navbar-nav ms-auto">
+                                            <a class="dropdown-toggle my-dropdown-toggle nav-link" href="#" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <h6><i class="bi bi-card-list" id="btn-ico"></i>Eventos</h6>
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                                                <li><a href="#" class="dropdown-item btn-event"><i class="bi bi-clipboard-check" id='btn-ico'></i> Administrar Eventos</a></li>
+                                            </ul>
+                                            
+                                            <a class="dropdown-toggle my-dropdown-toggle nav-link" href="#" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <h6><i class="bi bi-bell label-notifications"></i></h6>
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                                                <li><a href="{{ path('notifications_page') }}" class="dropdown-item"><i class="bi bi-arrow-down-up" id='btn-ico'></i>Abrir centro de notificaciones</a></li>
+                                            </ul>
+                                        
+                                            <a class="dropdown-toggle nav-link" href="#" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                                <div class='avatar'>
+                                                    {% if app.user.image == null %}
+                                                        <img src='{{ asset('assets/media/default.png') }}'/>
+                                                    {% else %}
+                                                        <img src='{{ asset('uploads/user/'~app.user.image) }}'/>
+                                                    {% endif %}
+                                                </div>
+                                                {{ app.user.name }} {{ app.user.surname }}
+                                                <span class="carret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="position: absolute; left: 14rem">
+                                                <li><a href="{{ path('user_profile', {'nickname': app.user.nick}) }}" class="dropdown-item"><i class="bi bi-chat-dots"></i>&nbsp;Ver Perfil</a></li>
+                                                <li><a href="{{ path("user_edit") }}" class="dropdown-item"><i class="bi bi-cloud-arrow-down"></i>&nbsp;Mis datos</a></li>
+                                                <hr/>
+                                                <li><a href="#" class="dropdown-item btn-help"><i class="bi bi-info-circle"></i>&nbsp;Ayuda</a></li>
+                                                <li><a href="{{ path("logout") }}" class="dropdown-item"><i class="bi bi-skip-end-btn"></i>&nbsp;Salir</a></li>
+                                            </ul>
+                                        </div>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+
+        </header>
+
+        <section id="content">
+            <div class='container'>
+                <br/>
+                <div class='text-center'>
+                    {% for message in app.session.flashbag().get('status') %}
+                        <div class="alert alert-warning">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="clearfix"></div>
+
+            {% block content %}
+                <!-- Add content -->
+            {% endblock %}
+        </section>
+        <!--<footer>
+            <hr/>
+            <div class="container">
+                <p class="text-muted">Web desarollada por Nylrak utilizando los poderes de Udemy</p>
+            </div>
+
+        </footer>-->
+
+
+    </body>
+</html>
