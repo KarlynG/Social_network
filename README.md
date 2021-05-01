@@ -1,4 +1,4 @@
-Social Network made with Symfony 3, Ajax and PHP.
+<h3>Social Network made with Symfony 3, Ajax and PHP.</h3>
 
 Symfony Standard Edition
 ========================
